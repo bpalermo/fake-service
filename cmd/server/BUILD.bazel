@@ -1,0 +1,59 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+load("@io_bazel_rules_docker//go:image.bzl", "go_image")
+load("@io_bazel_rules_docker//contrib:push-all.bzl", "docker_push")
+load("@io_bazel_rules_docker//container:container.bzl", "container_bundle", "container_push")
+
+docker_push(
+    name = "bundle_push",
+    bundle = ":image_bundle",
+)
+
+container_bundle(
+    name = "image_bundle",
+    images = {
+        "{STABLE_REPOSITORY}/fake-service:latest": ":image",
+        "{STABLE_REPOSITORY}/fake-service:{BUILD_SCM_REVISION}": ":image",
+        "{STABLE_REPOSITORY}/fake-service:{BUILD_SCM_TAG}": ":image",
+    },
+)
+
+go_image(
+    name = "image",
+    srcs = ["main.go"],
+    importpath = "github.com/bpalermo/fake-service/cmd/server",
+    deps = ["@com_github_sirupsen_logrus//:logrus"],
+)
+
+go_library(
+    name = "lib",
+    srcs = ["main.go"],
+    importpath = "github.com/bpalermo/fake-service/cmd/server",
+    visibility = ["//visibility:private"],
+    deps = ["@com_github_sirupsen_logrus//:go_default_library"],
+)
+
+go_binary(
+    name = "server",
+    embed = [":server_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "lib_test",
+    srcs = ["main_test.go"],
+    embed = [":lib"],
+)
+
+go_library(
+    name = "server_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/bpalermo/fake-service/cmd/server",
+    visibility = ["//visibility:private"],
+    deps = ["@com_github_sirupsen_logrus//:logrus"],
+)
+
+go_test(
+    name = "server_test",
+    srcs = ["main_test.go"],
+    embed = [":server_lib"],
+)
