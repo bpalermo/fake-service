@@ -18,9 +18,5 @@ clean:
 build:
 	@bazel build //...
 
-.PHONY: push
-push:
-	@bazel run //cmd/server:push_index
-
 .PHONY: all
 all: gazelle build test
