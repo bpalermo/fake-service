@@ -1,4 +1,5 @@
 load("//bazel/multi_arch:transition.bzl", "multi_arch")
+load("//bazel/stamp_tags:stamp_tags.bzl", "stamp_tags")
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
 load("@rules_oci//oci:defs.bzl", "oci_image", "oci_image_index", "oci_push")
 load("@rules_pkg//:pkg.bzl", "pkg_tar")
@@ -56,13 +57,18 @@ oci_image_index(
     ],
 )
 
+stamp_tags(
+    name = "stamped",
+    repotags = [
+        """($stamp.BUILD_SCM_TAG // "v0.0.0")""",
+        """($stamp.BUILD_SCM_REVISION)""",
+        "latest",
+    ],
+)
+
 oci_push(
     name = "push_index",
     image = ":index",
     repository = "index.docker.io/palermo/fake-service",
-    repotags = [
-        "latest",
-        "{BUILD_SCM_REVISION}",
-        "{BUILD_SCM_TAG}",
-    ],
+    repotags = ":stamped",
 )

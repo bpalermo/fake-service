@@ -1,6 +1,6 @@
-build --workspace_status_command=./tools/get_workspace_status.sh
+build --stamp --workspace_status_command=./tools/get_workspace_status.sh
 build --incompatible_enable_cc_toolchain_resolution
 
 build --extra_toolchains @zig_sdk//toolchain:linux_amd64_gnu.2.34,@zig_sdk//toolchain:linux_arm64_gnu.2.34
 
-run --workspace_status_command=./tools/get_workspace_status.sh
+run --stamp --workspace_status_command=./tools/get_workspace_status.sh
