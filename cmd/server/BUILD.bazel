@@ -61,7 +61,7 @@ stamp_tags(
     name = "stamped",
     repotags = [
         """($stamp.BUILD_SCM_TAG // "v0.0.0")""",
-        """($stamp.BUILD_SCM_REVISION)""",
+        """($stamp.BUILD_SCM_REVISION // "develop")""",
         "latest",
     ],
 )
