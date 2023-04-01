@@ -13,7 +13,7 @@
     [
       "@semantic-release/exec",
       {
-        "publishCmd": "bazel run //cmd/server:push_index"
+        "publishCmd": "bazel run --stamp --release_version=${nextRelease.version} //cmd/server:push_index"
       }
     ]
   ]

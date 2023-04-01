@@ -60,7 +60,7 @@ oci_image_index(
 stamp_tags(
     name = "stamped",
     repotags = [
-        """($stamp.BUILD_SCM_TAG // "v0.0.0")""",
+        """($stamp.BUILD_RELEASE_VERSION // "v0.0.0")""",
         """($stamp.BUILD_SCM_REVISION // "develop")""",
         "latest",
     ],
