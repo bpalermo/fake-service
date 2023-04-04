@@ -25,7 +25,7 @@ go_test(
 )
 
 pkg_tar(
-    name = "app",
+    name = "server_tar",
     srcs = [":server"],
 )
 
@@ -36,8 +36,8 @@ oci_image(
         "@platforms//cpu:x86_64": "amd64",
     }),
     base = "@distroless_base_nonroot",
-    tars = [":app"],
-    entrypoint = ["/app"],
+    tars = [":server_tar"],
+    entrypoint = ["/server"],
     os = "linux",
 )
 
